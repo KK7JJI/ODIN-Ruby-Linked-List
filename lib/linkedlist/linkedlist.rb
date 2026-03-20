@@ -49,9 +49,17 @@ module LinkedList
 
     def insert_at(index, *values)
       # public
-      self.size += values.flatten.length
+      values = values.flatten
+      self.size += values.length
+      return nil if values.length.zero?
 
-      values.flatten
+      # empty list: create head, create tail
+
+      # one element list (tail = nil)
+
+      # insert before the specified node
+
+      values
     end
 
     def at(index)
@@ -70,7 +78,23 @@ module LinkedList
 
     def remove_at(index)
       # public
+      return nil unless index < size
+      return nil if size.zero?
+
       self.size -= 1
+      return remove_at_head if index.zero?
+      return remove_at_tail if index == -1
+
+      node = locate_node(index)
+
+      parent_node = node.parent
+      child_node = node.child
+      parent_node.child = nil
+      child_node.parent = nil
+      parent_node.child = child_node unless parent_node.nil?
+      child_node.parent = parent_node unless child_node.nil?
+
+      node.value
     end
 
     def index(value)
@@ -111,6 +135,35 @@ module LinkedList
 
     attr_accessor :head, :tail
 
+    def remove_at_head
+      # index = 0
+      node = head
+
+      if tail.nil?
+        self.head = nil
+      elsif head.child == tail
+        self.head = tail
+        head.child = nil
+        self.tail = nil
+      else
+        self.head = head.child
+      end
+
+      node.value
+    end
+
+    def remove_at_tail
+      if tail.nil?
+        node = head
+        self.head = nil
+      else
+        node = tail
+        self.tail = tail.child
+      end
+
+      node.value
+    end
+
     def first_head(node)
       self.head = node
     end
@@ -119,6 +172,18 @@ module LinkedList
       node.parent = head
       head.child = node
       self.tail = node
+
+      node
+    end
+
+    def locate_node(index)
+      location = 0
+      node = head
+      while location < self.size && location < index
+        node = node.child
+        location += 1
+      end
+      return nil if location < index
 
       node
     end

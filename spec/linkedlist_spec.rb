@@ -3,10 +3,6 @@ require_relative '../lib/linkedlist'
 describe LinkedList::LinkedList do
   subject(:ll) { LinkedList::LinkedList.new }
 
-  describe '#append' do
-  end
-  describe '#prepend' do
-  end
   describe '#insert_at' do
   end
   describe '#size' do
@@ -21,9 +17,10 @@ describe LinkedList::LinkedList do
     it 'insert_at increases size by value length (value is linked list)' do
       expect { ll.insert_at(0, 0) }.to change { ll.size }.by(1)
       expect { ll.insert_at(0, 0, 1) }.to change { ll.size }.by(2)
-      expect { ll.insert_at(0, arr) }.to change { ll.size }.by(10)
+      expect { ll.insert_at(0, arr) }.to change { ll.size }.by(arr.length)
     end
-    it 'remove_at decreases size by 1' do
+    it 'remove_at(0) decreases size by 1' do
+      ll.append(0)
       expect { ll.remove_at(0) }.to change { ll.size }.by(-1)
     end
     it 'pop decreases size by 1' do
@@ -39,6 +36,7 @@ describe LinkedList::LinkedList do
 
     it 'returns nil on an empty list' do
       expect(ll.pop).to be_nil
+      expect(ll.size).to be_zero
     end
 
     it 'returns the head node value with each call' do
@@ -112,6 +110,23 @@ describe LinkedList::LinkedList do
           end
         end
       end
+    end
+  end
+  describe '#insert_at / #remove_at' do
+    let(:arr) { Array.new(20) { rand(10) } }
+
+    it 'insert [] on an empty list' do
+      ret = ll.insert_at(0, [])
+      expect(ll).to be_empty
+      expect(ll.to_a).to eql([])
+      expect(ret).to be_nil
+    end
+    it 'insert [] does not change the list' do
+      arr.each { |i| ll.prepend(i) }
+      ret = ll.insert_at(10, [])
+      expect(ll.size).to eql(arr.length)
+      expect(ll.to_a.reverse).to eql(arr)
+      expect(ret).to be_nil
     end
   end
 
