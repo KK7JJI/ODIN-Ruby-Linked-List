@@ -60,7 +60,12 @@ module LinkedList
 
     def pop
       # public
+      return nil if empty?
+
       self.size -= 1
+      result = head.value
+      self.head = head.child
+      result
     end
 
     def remove_at(index)

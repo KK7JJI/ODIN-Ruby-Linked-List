@@ -27,12 +27,30 @@ describe LinkedList::LinkedList do
       expect { ll.remove_at(0) }.to change { ll.size }.by(-1)
     end
     it 'pop decreases size by 1' do
+      ll.append('test')
       expect { ll.pop }.to change { ll.size }.by(-1)
     end
   end
   describe '#at' do
   end
   describe '#pop' do
+    let(:arr1) { (0...10).to_a }
+    let(:arr2) { (0...10).to_a.map { |i| (i + 'a'.ord).chr } }
+
+    it 'returns nil on an empty list' do
+      expect(ll.pop).to be_nil
+    end
+
+    it 'returns the head node value with each call' do
+      arr1.each do |value|
+        ll.prepend(value)
+      end
+      until ll.empty?
+        result = ll.pop
+        val = arr1.pop
+        expect(result).to eql(val)
+      end
+    end
   end
   describe '#remove_at' do
   end
