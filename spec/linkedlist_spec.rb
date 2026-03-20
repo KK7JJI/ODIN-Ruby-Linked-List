@@ -41,28 +41,62 @@ describe LinkedList::LinkedList do
   describe '#to_s' do
   end
   describe '#to_a' do
+    loaders = {
+      append: ->(obj, value) { obj.append(value) },
+      prepend: ->(obj, value) { obj.prepend(value) }
+    }
+
     let(:arr1) { (0...4).to_a }
     let(:arr2) { (0...4).to_a.map { |i| (i + 'a'.ord).chr } }
     it 'returns [] on empty list' do
       expect(ll.to_a).to eql([])
     end
-    it 'returns [0]' do
-      ll.append(arr1[0])
-      expect(ll.to_a).to eql([arr1[0]])
-    end
-    it 'returns [0,"a"] ' do
-      ll.append(arr2[0])
-      ll.append(arr2[1])
-      expect(ll.to_a).to eql(arr2.slice(0, 2))
-    end
 
-    it 'returns all values in array form' do
-      arr1.each { |elem| ll.append(elem) }
-      expect(ll.to_a).to eql(arr1)
-      arr2.each { |elem| ll.append(elem) }
-      expect(ll.to_a).to eql(arr1 + arr2)
+    loaders.each_pair do |name, loader|
+      context "using #{name}" do
+        if name == :append
+          it 'returns one value' do
+            loader.call(ll, arr1[0])
+            expect(ll.to_a).to eql(arr1.slice(0, 1))
+          end
+        else
+          it 'returns one value' do
+            loader.call(ll, arr1[0])
+            expect(ll.to_a.reverse).to eql(arr1.slice(0, 1))
+          end
+        end
+
+        if name == :append
+          it 'returns two values' do
+            loader.call(ll, arr2[0])
+            loader.call(ll, arr2[1])
+            expect(ll.to_a).to eql(arr2.slice(0, 2))
+          end
+        else
+          it 'returns two values' do
+            loader.call(ll, arr2[0])
+            loader.call(ll, arr2[1])
+            expect(ll.to_a.reverse).to eql(arr2.slice(0, 2))
+          end
+        end
+
+        if name == :append
+          it 'returns all values in array form' do
+            arr1.each { |elem| loader.call(ll, elem) }
+            arr2.each { |elem| loader.call(ll, elem) }
+            expect(ll.to_a).to eql(arr1 + arr2)
+          end
+        else
+          it 'returns all values in array form' do
+            arr1.each { |elem| loader.call(ll, elem) }
+            arr2.each { |elem| loader.call(ll, elem) }
+            expect(ll.to_a.reverse).to eql(arr1 + arr2)
+          end
+        end
+      end
     end
   end
+
   describe '#contains' do
   end
   describe '#empty' do

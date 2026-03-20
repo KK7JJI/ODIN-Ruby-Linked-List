@@ -15,12 +15,16 @@ module LinkedList
       # public
       self.size += 1
       node = Node.new(value: value, child: nil, parent: nil)
-      return append_first_head(node) if head.nil?
-      return append_first_tail(node) if tail.nil?
 
-      tail.child = node
-      node.parent = tail
-      self.tail = node
+      if head.nil?
+        first_head(node)
+      elsif tail.nil?
+        append_first_tail(node)
+      else
+        tail.child = node
+        node.parent = tail
+        self.tail = node
+      end
 
       node.value
     end
@@ -29,6 +33,16 @@ module LinkedList
       # public
       self.size += 1
       node = Node.new(value: value, child: nil, parent: nil)
+
+      if head.nil?
+        first_head(node)
+      elsif tail.nil?
+        prepend_first_tail(node)
+      else
+        node.child = head
+        head.parent = node
+        self.head = node
+      end
 
       node.value
     end
@@ -92,7 +106,7 @@ module LinkedList
 
     attr_accessor :head, :tail
 
-    def append_first_head(node)
+    def first_head(node)
       self.head = node
     end
 
@@ -100,6 +114,15 @@ module LinkedList
       node.parent = head
       head.child = node
       self.tail = node
+
+      node
+    end
+
+    def prepend_first_tail(node)
+      self.tail = head
+      self.head = node
+      head.child = tail
+      tail.parent = head
 
       node
     end
