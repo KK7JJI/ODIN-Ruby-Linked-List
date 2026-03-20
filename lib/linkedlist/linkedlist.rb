@@ -7,22 +7,37 @@ module LinkedList
 
     def initialize
       @size = 0
+      @head = nil
+      @tail = nil
     end
 
     def append(value)
       # public
       self.size += 1
+      node = Node.new(value: value, child: nil, parent: nil)
+      return append_first_head(node) if head.nil?
+      return append_first_tail(node) if tail.nil?
+
+      tail.child = node
+      node.parent = tail
+      self.tail = node
+
+      node.value
     end
 
     def prepend(value)
       # public
       self.size += 1
+      node = Node.new(value: value, child: nil, parent: nil)
+
+      node.value
     end
 
     def insert_at(index, *values)
       # public
-      puts values.flatten.inspect
       self.size += values.flatten.length
+
+      values.flatten
     end
 
     def at(index)
@@ -49,6 +64,17 @@ module LinkedList
 
     def to_a
       # public
+      result = []
+      return result if head.nil?
+
+      node = head
+      until node.child.nil?
+        result << node.value
+        node = node.child
+      end
+      result << node.value unless node.nil?
+
+      result
     end
 
     def contains?(value)
@@ -64,10 +90,18 @@ module LinkedList
 
     private
 
-    def head
+    attr_accessor :head, :tail
+
+    def append_first_head(node)
+      self.head = node
     end
 
-    def tail
+    def append_first_tail(node)
+      node.parent = head
+      head.child = node
+      self.tail = node
+
+      node
     end
   end
 end

@@ -1,4 +1,4 @@
-require_relative '../lib/linkedlist/linkedlist'
+require_relative '../lib/linkedlist'
 
 describe LinkedList::LinkedList do
   subject(:ll) { LinkedList::LinkedList.new }
@@ -41,6 +41,27 @@ describe LinkedList::LinkedList do
   describe '#to_s' do
   end
   describe '#to_a' do
+    let(:arr1) { (0...4).to_a }
+    let(:arr2) { (0...4).to_a.map { |i| (i + 'a'.ord).chr } }
+    it 'returns [] on empty list' do
+      expect(ll.to_a).to eql([])
+    end
+    it 'returns [0]' do
+      ll.append(arr1[0])
+      expect(ll.to_a).to eql([arr1[0]])
+    end
+    it 'returns [0,"a"] ' do
+      ll.append(arr2[0])
+      ll.append(arr2[1])
+      expect(ll.to_a).to eql(arr2.slice(0, 2))
+    end
+
+    it 'returns all values in array form' do
+      arr1.each { |elem| ll.append(elem) }
+      expect(ll.to_a).to eql(arr1)
+      arr2.each { |elem| ll.append(elem) }
+      expect(ll.to_a).to eql(arr1 + arr2)
+    end
   end
   describe '#contains' do
   end

@@ -8,6 +8,8 @@ Add in additional project framework.
 - stubbed in linkedlist classes
 - stubbed in required linked list methods
 
+develop #to_a
 
-#empty?
-
+- need to implement the node class and do initial
+  developing of the append method to start building
+  a list.
