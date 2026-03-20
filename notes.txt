@@ -1,2 +1,13 @@
 Project notes:
 
+Commits
+
+Add in additional project framework.
+
+- empty RSpec test script
+- stubbed in linkedlist classes
+- stubbed in required linked list methods
+
+
+#empty?
+

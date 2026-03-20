@@ -3,23 +3,26 @@
 module LinkedList
   # linked list datastructure
   class LinkedList
+    attr_accessor :size
+
     def initialize
+      @size = 0
     end
 
-    def append
+    def append(value)
       # public
+      self.size += 1
     end
 
-    def prepend
+    def prepend(value)
       # public
+      self.size += 1
     end
 
     def insert_at(index, *values)
       # public
-    end
-
-    def size
-      # public
+      puts values.flatten.inspect
+      self.size += values.flatten.length
     end
 
     def at(index)
@@ -28,10 +31,12 @@ module LinkedList
 
     def pop
       # public
+      self.size -= 1
     end
 
     def remove_at(index)
       # public
+      self.size -= 1
     end
 
     def index(value)
@@ -52,6 +57,9 @@ module LinkedList
 
     def empty?
       # public
+      return true if size.zero?
+
+      false
     end
 
     private
