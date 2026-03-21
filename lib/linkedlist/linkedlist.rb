@@ -49,17 +49,20 @@ module LinkedList
 
     def insert_at(index, value)
       # public
+      self.size += 1
       return insert_at_head(value) if index.zero?
-      return insert_at_tail(value) if index == -1
+      return insert_after_tail(value) if index == -1
 
       node = locate_node(index)
-      return insert_at_tail(value) if node == tail
 
       new_node = Node.new(value: value)
+      prior_node = node.parent
+      next_node = node
 
-      new_node.parent = node
-      new_node.child = node.child
-      node.child = new_node
+      prior_node.child = new_node
+      new_node.parent = prior_node
+      next_node.parent = new_node
+      new_node.child = next_node
 
       node.value
     end
@@ -140,7 +143,11 @@ module LinkedList
 
     def insert_at_head(value)
       new_node = Node.new(value: value)
-      if tail.nil?
+      if head.nil?
+        self.head = new_node
+        head.parent = nil
+        head.child = nil
+      elsif tail.nil?
         self.tail = head
         self.head = new_node
         head.parent = nil
@@ -156,11 +163,19 @@ module LinkedList
       value
     end
 
-    def insert_at_tail(value)
+    def insert_after_tail(value)
+      return insert_at_head(value) if head.nil?
+
       new_node = Node.new(value: value)
-      new_node.parent = tail
-      new_node.child = nil
-      self.tail = new_node
+      if tail.nil?
+        self.tail = new_node
+        head.child = tail
+        tail.parent = head
+      else
+        tail.child = new_node
+        new_node.parent = tail
+        self.tail = new_node
+      end
 
       value
     end

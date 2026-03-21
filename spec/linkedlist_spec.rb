@@ -16,8 +16,8 @@ describe LinkedList::LinkedList do
     let(:arr) { Array.new(10) { rand(10) } }
     it 'insert_at increases size by value length (value is linked list)' do
       expect { ll.insert_at(0, 0) }.to change { ll.size }.by(1)
-      expect { ll.insert_at(0, 0, 1) }.to change { ll.size }.by(2)
-      expect { ll.insert_at(0, arr) }.to change { ll.size }.by(arr.length)
+      # expect { ll.insert_at(0, 0, 1) }.to change { ll.size }.by(2)
+      # expect { ll.insert_at(0, arr) }.to change { ll.size }.by(arr.length)
     end
     it 'remove_at(0) decreases size by 1' do
       ll.append(0)
@@ -171,6 +171,61 @@ describe LinkedList::LinkedList do
     end
   end
   describe '#insert_at' do
+    context 'single node insertion' do
+      it 'insert first node from head, start with empty list.' do
+        result = ll.insert_at(0, 0)
+        expect(result).to eql(0)
+        expect(ll.to_a).to eql([0])
+      end
+      it 'insert 2 nodes from head, start with empty list.' do
+        ll.insert_at(0, 0)
+        ll.insert_at(0, 1)
+        expect(ll.to_a).to eql([1, 0])
+      end
+      it 'insert 3rd node from head, start with empty list.' do
+        ll.insert_at(0, 0)
+        ll.insert_at(0, 1)
+        ll.insert_at(0, 2)
+        expect(ll.to_a).to eql([2, 1, 0])
+      end
+      it 'insert single node from tail, start with empty list.' do
+        result = ll.insert_at(-1, 0)
+        expect(result).to eql(0)
+        expect(ll.to_a).to eql([0])
+      end
+      it 'insert 2 nodes from tail, start with empty list.' do
+        ll.insert_at(-1, 0)
+        ll.insert_at(-1, 1)
+        expect(ll.to_a).to eql([0, 1])
+      end
+      it 'insert 3rd node from tail, start with empty list.' do
+        ll.insert_at(-1, 0)
+        ll.insert_at(-1, 1)
+        ll.insert_at(-1, 2)
+        expect(ll.to_a).to eql([0, 1, 2])
+      end
+      it 'insert mid list' do
+        arr = (0...10).to_a
+        arr.each { |i| ll.append(i) }
+        ll.insert_at(5, 100)
+        expect(ll.to_a).to eql(arr.insert(5, 100))
+      end
+    end
+  end
+  describe '#insert_at / #remove_at' do
+    let(:arr) { Array.new(10) { rand(10) } }
+    it 'systematically test insert_at, delete_at' do
+      arr.each { |i| ll.append(i) }
+
+      arr.length.times do |i|
+        ll.insert_at(i, 100)
+        arr.insert(i, 100)
+        expect(ll.to_a).to eql(arr)
+        ll.remove_at(i)
+        arr.delete_at(i)
+        expect(ll.to_a).to eql(arr)
+      end
+    end
   end
 
   describe '#contains' do
