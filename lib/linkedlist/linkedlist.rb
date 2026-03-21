@@ -69,8 +69,8 @@ module LinkedList
     end
 
     def at(index)
-      raise IndexError unless (index > -2) && (index < size)
-      raise IndexError if empty?
+      return nil unless (index > -1) && (index < size)
+      return nil if empty?
 
       return tail.value if !tail.nil? && (index == -1)
       return head.value if !head.nil? && (index == 0)
@@ -112,7 +112,18 @@ module LinkedList
     end
 
     def index(value)
-      # public
+      nil if empty?
+
+      location = 0
+      node = head
+      until node.nil? || node.value == value
+        node = node.child
+        location += 1
+      end
+
+      return nil if node.nil?
+
+      location
     end
 
     def to_s

@@ -260,27 +260,47 @@ describe LinkedList::LinkedList do
     end
   end
   describe '#at' do
-    let(:arr) { Array.new(10) { (0...10).to_a } }
+    let(:arr) { (0...10).to_a }
     it 'at(i) returns the list value at index i' do
       arr.each { |i| ll.append(i) }
       arr.length.times do |i|
         expect(ll.at(i)).to eql(arr[i])
       end
     end
-    it 'return last value if index = -1' do
+    it 'return nil if index < -1' do
       arr.each { |i| ll.append(i) }
-      expect(ll.at(-1)).to eql(arr[-1])
+      expect(ll.at(-1)).to be_nil
     end
     it 'return first value if index = 0' do
       arr.each { |i| ll.append(i) }
       expect(ll.at(0)).to eql(arr[0])
     end
-    it 'at(i) on empty list raises IndexError' do
-      expect { ll.at(0) }.to raise_error(IndexError)
+    it 'at(i) on empty list returns nil' do
+      expect(ll.at(0)).to be_nil
     end
     it 'raise IndexError if index >= size' do
       arr.each { |i| ll.append(i) }
-      expect { ll.at(arr.length) }.to raise_error(IndexError)
+      expect(ll.at(arr.length)).to be_nil
+    end
+  end
+  describe '#index' do
+    let(:arr) do
+      (0...10).map { |item| (item + 'a'.ord).chr }
+    end
+    it 'index() returns nil on empty list' do
+      expect(ll.index('test')).to be_nil
+    end
+    it 'index() returns nil if value no in list' do
+      arr.reverse_each { |item| ll.prepend(item) }
+
+      expect(ll.index('test')).to be_nil
+    end
+    it 'index() returns index of value location' do
+      arr.reverse_each { |item| ll.prepend(item) }
+      arr.each_with_index do |item, i|
+        result = ll.index(item)
+        expect(result).to eql(i)
+      end
     end
   end
 end
