@@ -83,7 +83,8 @@ module LinkedList
     end
 
     def remove_at(index)
-      # public
+      raise IndexError unless (index > -2) && (index < size)
+
       return nil unless index < size
       return nil if size.zero?
 

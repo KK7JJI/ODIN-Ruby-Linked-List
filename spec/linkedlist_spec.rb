@@ -169,6 +169,16 @@ describe LinkedList::LinkedList do
       arr_comp.delete_at(-1)
       expect(ll.to_a).to eql(arr_comp)
     end
+    it 'raise error if index < -1' do
+      arr = (0...10).to_a
+      arr.each { |i| ll.append(i) }
+      expect { ll.remove_at(-2) }.to raise_error(IndexError)
+    end
+    it 'raise error unless index <= size' do
+      arr = (0...10).to_a
+      arr.each { |i| ll.append(i) }
+      expect { ll.remove_at(arr.length) }.to raise_error(IndexError)
+    end
   end
   describe '#insert_at' do
     context 'single node insertion' do
