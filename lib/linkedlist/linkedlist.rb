@@ -47,19 +47,21 @@ module LinkedList
       node.value
     end
 
-    def insert_at(index, *values)
+    def insert_at(index, value)
       # public
-      values = values.flatten
-      self.size += values.length
-      return nil if values.length.zero?
+      return insert_at_head(value) if index.zero?
+      return insert_at_tail(value) if index == -1
 
-      # empty list: create head, create tail
+      node = locate_node(index)
+      return insert_at_tail(value) if node == tail
 
-      # one element list (tail = nil)
+      new_node = Node.new(value: value)
 
-      # insert before the specified node
+      new_node.parent = node
+      new_node.child = node.child
+      node.child = new_node
 
-      values
+      node.value
     end
 
     def at(index)
@@ -86,6 +88,7 @@ module LinkedList
       return remove_at_tail if index == -1
 
       node = locate_node(index)
+      return remove_at_tail if node == tail
 
       parent_node = node.parent
       child_node = node.child
@@ -135,10 +138,35 @@ module LinkedList
 
     attr_accessor :head, :tail
 
-    def remove_at_head
-      # index = 0
-      node = head
+    def insert_at_head(value)
+      new_node = Node.new(value: value)
+      if tail.nil?
+        self.tail = head
+        self.head = new_node
+        head.parent = nil
+        head.child = tail
+        tail.parent = head
+        tail.child = nil
+      else
+        head.parent = new_node
+        new_node.child = head
+        self.head = new_node
+      end
 
+      value
+    end
+
+    def insert_at_tail(value)
+      new_node = Node.new(value: value)
+      new_node.parent = tail
+      new_node.child = nil
+      self.tail = new_node
+
+      value
+    end
+
+    def remove_at_head
+      node = head
       if tail.nil?
         self.head = nil
       elsif head.child == tail
@@ -148,7 +176,6 @@ module LinkedList
       else
         self.head = head.child
       end
-
       node.value
     end
 
@@ -156,11 +183,15 @@ module LinkedList
       if tail.nil?
         node = head
         self.head = nil
+      elsif head.child == tail
+        node = tail
+        head.child = nil
+        self.tail = nil
       else
         node = tail
-        self.tail = tail.child
+        self.tail = tail.parent
+        tail.child = nil
       end
-
       node.value
     end
 

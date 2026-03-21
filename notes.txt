@@ -13,3 +13,5 @@ develop #to_a
 - need to implement the node class and do initial
   developing of the append method to start building
   a list.
+
+develop #prepend

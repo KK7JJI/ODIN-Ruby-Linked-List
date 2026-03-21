@@ -50,8 +50,6 @@ describe LinkedList::LinkedList do
       end
     end
   end
-  describe '#remove_at' do
-  end
   describe '#index' do
   end
   describe '#to_s' do
@@ -112,22 +110,67 @@ describe LinkedList::LinkedList do
       end
     end
   end
-  describe '#insert_at / #remove_at' do
-    let(:arr) { Array.new(20) { rand(10) } }
-
-    it 'insert [] on an empty list' do
-      ret = ll.insert_at(0, [])
+  describe '#remove_at' do
+    let(:arr) { (0...10).to_a }
+    it 'remove single node' do
+      ll.append(0)
+      result = ll.remove_at(0)
+      expect(result).to eql(0)
       expect(ll).to be_empty
       expect(ll.to_a).to eql([])
-      expect(ret).to be_nil
     end
-    it 'insert [] does not change the list' do
-      arr.each { |i| ll.prepend(i) }
-      ret = ll.insert_at(10, [])
-      expect(ll.size).to eql(arr.length)
-      expect(ll.to_a.reverse).to eql(arr)
-      expect(ret).to be_nil
+    it 'remove first node' do
+      arr.each { |i| ll.append(i) }
+      result = ll.remove_at(0)
+      expect(result).to eql(0)
+      expect(ll.to_a).to eql((1...10).to_a)
     end
+    it 'remove 2 of 2 nodes starting at head' do
+      ll.append(0)
+      ll.append(1)
+      result = ll.remove_at(0)
+      expect(result).to eql(0)
+      expect(ll.to_a).to eql([1])
+      result = ll.remove_at(0)
+      expect(result).to eql(1)
+      expect(ll.to_a).to eql([])
+    end
+    it 'remove 2 of 2 nodes starting at tail' do
+      ll.append(0)
+      ll.append(1)
+      result = ll.remove_at(-1)
+      expect(result).to eql(1)
+      expect(ll.to_a).to eql([0])
+      result = ll.remove_at(-1)
+      expect(result).to eql(0)
+      expect(ll.to_a).to eql([])
+    end
+    it 'remove first node' do
+      arr.each { |i| ll.append(i) }
+      result = ll.remove_at(0)
+      expect(result).to eql(0)
+      arr_comp = arr.dup
+      arr_comp.delete_at(0)
+      expect(ll.to_a).to eql(arr_comp)
+    end
+    it 'remove center node' do
+      arr.each { |i| ll.append(i) }
+      result = ll.remove_at(5)
+      expect(result).to eql(5)
+      arr_comp = arr.dup
+      arr_comp.delete_at(5)
+      expect(ll.to_a).to eql(arr_comp)
+    end
+    it 'remove last node' do
+      arr.each { |i| ll.append(i) }
+      result = ll.remove_at(-1)
+      expect(result).to eql(9)
+      arr_comp = arr.dup
+      arr_comp.delete_at(-1)
+      expect(ll.to_a).to eql(arr_comp)
+    end
+  end
+  describe '#insert_at' do
   end
 
   describe '#contains' do
