@@ -48,7 +48,8 @@ module LinkedList
     end
 
     def insert_at(index, value)
-      # public
+      raise IndexError if !empty? && !(index >= -1 && index < size)
+
       self.size += 1
       return insert_at_head(value) if index.zero?
       return insert_after_tail(value) if index == -1
@@ -225,11 +226,10 @@ module LinkedList
     def locate_node(index)
       location = 0
       node = head
-      while location < self.size && location < index
-        node = node.child
+      while location < index && location <= self.size
         location += 1
+        node = node.child
       end
-      return nil if location < index
 
       node
     end

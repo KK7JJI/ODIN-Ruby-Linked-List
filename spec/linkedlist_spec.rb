@@ -210,6 +210,16 @@ describe LinkedList::LinkedList do
         ll.insert_at(5, 100)
         expect(ll.to_a).to eql(arr.insert(5, 100))
       end
+      it 'testing out of bound index -2' do
+        arr = (0...10).to_a
+        arr.each { |i| ll.append(i) }
+        expect { ll.insert_at(-2, 100) }.to raise_error(IndexError)
+      end
+      it 'testing out of bound index - size of list' do
+        arr = (0...10).to_a
+        arr.each { |i| ll.append(i) }
+        expect { ll.insert_at(ll.size, 100) }.to raise_error(IndexError)
+      end
     end
   end
   describe '#insert_at / #remove_at' do
