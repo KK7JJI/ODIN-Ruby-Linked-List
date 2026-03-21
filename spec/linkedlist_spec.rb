@@ -303,4 +303,24 @@ describe LinkedList::LinkedList do
       end
     end
   end
+  describe '#contains?' do
+    let(:arr) do
+      (0...10).map { |item| (item + 'a'.ord).chr }
+    end
+    it 'contains? returns false on empty list' do
+      expect(ll.contains?('test')).to eql(false)
+    end
+    it 'contains? returns false if value is not in list' do
+      arr.reverse_each { |item| ll.prepend(item) }
+
+      expect(ll.contains?('test')).to eql(false)
+    end
+    it 'contains? true if value is in list' do
+      arr.reverse_each { |item| ll.prepend(item) }
+      arr.each_with_index do |item, i|
+        result = ll.index(item)
+        expect(ll.contains?(item)).to eql(true)
+      end
+    end
+  end
 end

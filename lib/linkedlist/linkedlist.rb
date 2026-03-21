@@ -148,7 +148,9 @@ module LinkedList
     end
 
     def contains?(value)
-      # public
+      return true unless index(value).nil?
+
+      false
     end
 
     def empty?
