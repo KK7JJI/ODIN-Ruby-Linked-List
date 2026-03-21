@@ -69,7 +69,15 @@ module LinkedList
     end
 
     def at(index)
-      # public
+      raise IndexError unless (index > -2) && (index < size)
+      raise IndexError if empty?
+
+      return tail.value if !tail.nil? && (index == -1)
+      return head.value if !head.nil? && (index == 0)
+
+      node = locate_node(index)
+
+      node.value
     end
 
     def pop
@@ -84,9 +92,7 @@ module LinkedList
 
     def remove_at(index)
       raise IndexError unless (index > -2) && (index < size)
-
-      return nil unless index < size
-      return nil if size.zero?
+      raise IndexError if empty?
 
       self.size -= 1
       return remove_at_head if index.zero?
@@ -110,7 +116,9 @@ module LinkedList
     end
 
     def to_s
-      # public
+      return '' if empty?
+
+      "=> (#{to_a.join(') -> (')}) -> nil"
     end
 
     def to_a

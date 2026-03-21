@@ -52,8 +52,7 @@ describe LinkedList::LinkedList do
   end
   describe '#index' do
   end
-  describe '#to_s' do
-  end
+
   describe '#to_a' do
     loaders = {
       append: ->(obj, value) { obj.append(value) },
@@ -258,6 +257,30 @@ describe LinkedList::LinkedList do
     it 'returns false otherwise' do
       ll.append(0)
       expect(ll).not_to be_empty
+    end
+  end
+  describe '#at' do
+    let(:arr) { Array.new(10) { (0...10).to_a } }
+    it 'at(i) returns the list value at index i' do
+      arr.each { |i| ll.append(i) }
+      arr.length.times do |i|
+        expect(ll.at(i)).to eql(arr[i])
+      end
+    end
+    it 'return last value if index = -1' do
+      arr.each { |i| ll.append(i) }
+      expect(ll.at(-1)).to eql(arr[-1])
+    end
+    it 'return first value if index = 0' do
+      arr.each { |i| ll.append(i) }
+      expect(ll.at(0)).to eql(arr[0])
+    end
+    it 'at(i) on empty list raises IndexError' do
+      expect { ll.at(0) }.to raise_error(IndexError)
+    end
+    it 'raise IndexError if index >= size' do
+      arr.each { |i| ll.append(i) }
+      expect { ll.at(arr.length) }.to raise_error(IndexError)
     end
   end
 end
