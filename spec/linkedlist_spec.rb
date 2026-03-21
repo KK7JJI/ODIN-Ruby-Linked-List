@@ -183,7 +183,6 @@ describe LinkedList::LinkedList do
     context 'single node insertion' do
       it 'insert first node from head, start with empty list.' do
         result = ll.insert_at(0, 0)
-        expect(result).to eql(0)
         expect(ll.to_a).to eql([0])
       end
       it 'insert 2 nodes from head, start with empty list.' do
@@ -199,7 +198,6 @@ describe LinkedList::LinkedList do
       end
       it 'insert single node from tail, start with empty list.' do
         result = ll.insert_at(-1, 0)
-        expect(result).to eql(0)
         expect(ll.to_a).to eql([0])
       end
       it 'insert 2 nodes from tail, start with empty list.' do
@@ -227,7 +225,7 @@ describe LinkedList::LinkedList do
       it 'testing out of bound index - size of list' do
         arr = (0...10).to_a
         arr.each { |i| ll.append(i) }
-        expect { ll.insert_at(ll.size, 100) }.to raise_error(IndexError)
+        expect { ll.insert_at(ll.size + 1, 100) }.to raise_error(IndexError)
       end
     end
   end
@@ -244,6 +242,39 @@ describe LinkedList::LinkedList do
         arr.delete_at(i)
         expect(ll.to_a).to eql(arr)
       end
+    end
+  end
+  describe '#insert_at - multiple values' do
+    let(:arr) { Array.new(10) { rand(10) } }
+
+    it 'insert on empty list, comma sep values' do
+      ll.insert_at(0, 0, 1, 2)
+      expect(ll.to_a).to eql([0, 1, 2])
+    end
+    it 'insert on empty list, values = array' do
+      ll.insert_at(0, [0, 1, 2])
+      expect(ll.to_a).to eql([0, 1, 2])
+    end
+    it 'insert at list head' do
+      ll.insert_at(0, arr)
+      ll.insert_at(0, 'a', 'b')
+      expect(ll.to_a).to eql(%w[a b] + arr)
+    end
+    it 'insert at list tail (index = -1)' do
+      ll.insert_at(0, arr)
+      ll.insert_at(-1, 'a', 'b')
+      expect(ll.to_a).to eql(arr + %w[a b])
+    end
+    it 'insert at list tail (index = size)' do
+      ll.insert_at(0, arr)
+      ll.insert_at(arr.size, 'a', 'b')
+      expect(ll.to_a).to eql(arr + %w[a b])
+    end
+    it 'insert mid list (index = 5)' do
+      ll.insert_at(0, arr)
+      ll.insert_at(5, 'a', 'b')
+      result = arr.slice(0, 5) + %w[a b] + arr.slice(5, arr.length)
+      expect(ll.to_a).to eql(result)
     end
   end
 

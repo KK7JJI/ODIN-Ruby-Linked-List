@@ -47,25 +47,35 @@ module LinkedList
       node.value
     end
 
-    def insert_at(index, value)
+    def insert_at(index, *values)
+      index = -1 if index == size
       raise IndexError if !empty? && !(index >= -1 && index < size)
 
-      self.size += 1
-      return insert_at_head(value) if index.zero?
-      return insert_after_tail(value) if index == -1
+      values = values.flatten
 
-      node = locate_node(index)
+      values.each do |value|
+        if index.zero?
+          insert_at_head(value)
+        elsif index == -1 || index >= size
+          insert_after_tail(value)
+        else
+          node = locate_node(index)
 
-      new_node = Node.new(value: value)
-      prior_node = node.parent
-      next_node = node
+          new_node = Node.new(value: value)
+          prior_node = node.parent
+          next_node = node
 
-      prior_node.child = new_node
-      new_node.parent = prior_node
-      next_node.parent = new_node
-      new_node.child = next_node
+          prior_node.child = new_node
+          new_node.parent = prior_node
+          next_node.parent = new_node
+          new_node.child = next_node
+        end
 
-      node.value
+        self.size += 1
+        index += 1 unless index.negative?
+      end
+
+      values
     end
 
     def at(index)
